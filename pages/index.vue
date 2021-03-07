@@ -68,7 +68,12 @@
 			</v-expand-transition>
 		</div>
 		<a class="wr-btn" @click="print">產生</a>
-
+		<v-divider style="margin: 10px 0" />
+		<p style="opacity: .7;font-size: .85em">
+			Developed by
+			<a href="https://gnehs.net" target="_blank">gnehs</a> |
+			<a href="https://github.com/gnehs/tg-message-sticker" target="_blank">GitHub</a>
+		</p>
 		<v-dialog v-model="resultDialog" width="500">
 			<v-card>
 				<v-card-title>Result</v-card-title>
@@ -94,6 +99,7 @@
 	margin: 0 auto
 	max-width: 512px
 	padding: 0 16px
+	margin-top: 32px
 	.cu.chat
 		text-align: left
 	.block
