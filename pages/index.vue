@@ -2,8 +2,8 @@
 	<div class="index-container">
 		<img src="@/static/icon.png" width="64px" alt="icon" />
 		<h1>請支援貼圖</h1>
-		<div class="cu chat" data-style="telegram" ref="printMe">
-			<div class="message text read">
+		<div class="cu chat" data-style="telegram">
+			<div class="message text read" ref="printMe">
 				<div class="avatar">
 					<img
 						:src="avatar||'https://avatars.githubusercontent.com/u/16719720?s=460&u=3840af5115bb889cea5e8fa242b4e10b5ad3ab55&v=4'"
@@ -84,7 +84,7 @@
 						text
 						@click="outputFile = false"
 						:href="output"
-						:download="`${name}_${text}.png`"
+						:download="`${name}_${text}.webp`"
 					>Download</v-btn>
 					<v-spacer></v-spacer>
 					<v-btn color="primary" text @click="resultDialog = false">close</v-btn>
@@ -100,10 +100,7 @@
 	max-width: 512px
 	padding: 0 16px
 	.cu.chat
-		width: 256px
-		max-width: 256px
 		text-align: left
-		overflow: hidden
 	.block
 		background: #fcfaff
 		color: #1976d2
@@ -120,6 +117,7 @@
 		width: 100%
 </style>
 <script>
+import html2canvas from 'html2canvas';
 export default {
 	data: () => ({
 		userInfoSource: 'telegram',
@@ -154,16 +152,20 @@ export default {
 	methods: {
 		async print() {
 			const el = this.$refs.printMe;
-			// add option type to get the image version
-			// if not provided the promise will return 
-			// the canvas.
 			const options = {
-				type: 'dataURL',
 				backgroundColor: null,
 				useCORS: true,
-				scale: 2,
+				scale: 3
 			}
-			this.output = await this.$html2canvas(el, options);
+			let canvas = await html2canvas(el, options)
+
+			let extra_canvas = document.createElement("canvas");
+			let height = 512 / canvas.width * canvas.height
+			extra_canvas.setAttribute('width', 512);
+			extra_canvas.setAttribute('height', height);
+			let ctx = extra_canvas.getContext('2d');
+			ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 512, height);
+			this.output = extra_canvas.toDataURL('image/webp');
 			this.resultDialog = true
 		},
 		async fetchUserInfo() {
