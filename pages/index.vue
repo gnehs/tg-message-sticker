@@ -35,6 +35,13 @@
 		<v-text-field v-model="admin" label="admin"></v-text-field>
 		<v-textarea v-model="text" label="text"></v-textarea>
 		<v-text-field v-model="time" label="time"></v-text-field>
+		<v-checkbox v-model="reply.active" color="red" label="reply"></v-checkbox>
+		<v-expand-transition>
+			<div v-show="reply.active">
+				<v-text-field color="red" v-model="reply.name" label="reply name"></v-text-field>
+				<v-text-field color="red" v-model="reply.text" label="reply text"></v-text-field>
+			</div>
+		</v-expand-transition>
 		<a class="wr-btn" @click="print">產生</a>
 
 		<v-dialog v-model="resultDialog" width="500">
@@ -89,8 +96,8 @@ export default {
 		admin: '可愛勝勝',
 		reply: {
 			active: false,
-			name: '',
-			text: ''
+			name: 'name',
+			text: 'text'
 		},
 		text: '請支援貼圖',
 		time: '12:34',
