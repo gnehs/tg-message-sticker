@@ -168,7 +168,7 @@ export default {
 		},
 		async fetchUserInfo() {
 			this.usernameFetching = true
-			const { name, img } = await fetch(`https://tg-info.gnehs.workers.dev/${this.username}`).then(x => x.json())
+			const { name, img } = await fetch(`https://tg-info.gnehs.workers.dev/${this.username.replace('@', '')}`).then(x => x.json())
 			this.name = name
 			this.avatar = img
 			this.usernameFetching = false
