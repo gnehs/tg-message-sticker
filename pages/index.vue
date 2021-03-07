@@ -33,7 +33,7 @@
 			</div>
 		</div>
 		<div class="block">
-			<h4 style="text-align:left">User Info Source</h4>
+			<h4 style="text-align:left">User Info</h4>
 			<v-radio-group v-model="userInfoSource" row>
 				<v-radio label="fetch from telegram" value="telegram"></v-radio>
 				<v-radio label="custom" value="custom"></v-radio>
