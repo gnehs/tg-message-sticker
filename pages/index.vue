@@ -79,13 +79,8 @@
 					<div>長按圖片或點擊下載來儲存</div>
 				</v-card-text>
 				<v-card-actions>
-					<v-btn
-						color="primary"
-						text
-						@click="outputFile = false"
-						:href="output"
-						:download="`${name}_${text}.webp`"
-					>Download</v-btn>
+					<v-btn color="primary" text :href="output" :download="`${name}_${text}.png`">.png</v-btn>
+					<v-btn color="primary" text :href="outputWebp" :download="`${name}_${text}.webp`">.webp</v-btn>
 					<v-spacer></v-spacer>
 					<v-btn color="primary" text @click="resultDialog = false">close</v-btn>
 				</v-card-actions>
@@ -165,7 +160,8 @@ export default {
 			extra_canvas.setAttribute('height', height);
 			let ctx = extra_canvas.getContext('2d');
 			ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 512, height);
-			this.output = extra_canvas.toDataURL('image/webp');
+			this.output = extra_canvas.toDataURL();
+			this.outputWebp = extra_canvas.toDataURL('image/webp');
 			this.resultDialog = true
 		},
 		async fetchUserInfo() {
