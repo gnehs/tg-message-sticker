@@ -78,15 +78,36 @@
 			<v-card>
 				<v-card-title>Result</v-card-title>
 				<v-card-text>
-					<div class="output-container" v-if="output">
+					<div class="output-container" v-if="output.svg">
 						<img :src="output.svg" alt="output-img" />
+					</div>
+					<div v-else style="text-align:center;margin: 20px 0;">
+						<v-progress-circular indeterminate color="primary" />
 					</div>
 					<div>Long press the image or click download to save.</div>
 				</v-card-text>
 				<v-card-actions>
-					<v-btn color="primary" text :href="output.svg" :download="`${name}_${text}.svg`">.svg</v-btn>
-					<v-btn color="primary" text :href="output.png" :download="`${name}_${text}.png`">.png</v-btn>
-					<v-btn color="primary" text :href="output.webp" :download="`${name}_${text}.webp`">.webp</v-btn>
+					<v-btn
+						color="primary"
+						text
+						v-show="output.png"
+						:href="output.png"
+						:download="`${name}_${text}.png`"
+					>.png</v-btn>
+					<v-btn
+						color="primary"
+						text
+						v-show="output.svg"
+						:href="output.svg"
+						:download="`${name}_${text}.svg`"
+					>.svg</v-btn>
+					<v-btn
+						color="primary"
+						text
+						v-show="output.webp"
+						:href="output.webp"
+						:download="`${name}_${text}.webp`"
+					>.webp</v-btn>
 					<v-spacer></v-spacer>
 					<v-btn color="primary" text @click="resultDialog = false">close</v-btn>
 				</v-card-actions>
@@ -163,22 +184,20 @@ export default {
 	},
 	methods: {
 		async print() {
-			const vue = this
-			window.scrollTo(0, 0)
 			this.resultDialog = true
+			this.output = { svg: null, webp: null, png: null }
 			const el = this.$refs.printMe;
 			const svgImage = document.createElement('img')
 			this.output.svg = await domtoimage.toSvg(el)
 			svgImage.src = this.output
-			svgImage.onload = function () {
-				const canvas = document.createElement("canvas");
-				const h = 512 / svgImage.width * svgImage.height
-				canvas.setAttribute('width', 512);
-				canvas.setAttribute('height', h);
-				canvas.getContext('2d').drawImage(svgImage, 0, 0, canvas.width, canvas.height);
-				vue.output.png = canvas.toDataURL();
-				vue.output.webp = canvas.toDataURL('image/webp');
-			}
+			// resize
+			const canvas = document.createElement("canvas");
+			const h = 512 / svgImage.width * svgImage.height
+			canvas.setAttribute('width', 512);
+			canvas.setAttribute('height', h);
+			canvas.getContext('2d').drawImage(svgImage, 0, 0, canvas.width, canvas.height);
+			this.output.png = canvas.toDataURL();
+			this.output.webp = canvas.toDataURL('image/webp');
 		},
 		async fetchUserInfo() {
 			this.usernameFetching = true
