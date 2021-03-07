@@ -26,7 +26,8 @@
 		background-size: 300px;
 		box-shadow: inset 100vw 100vw rgba(255, 255, 255, 0.95);
 	}
-	.v-application .white {
+	.v-application
+		.white.white.white.white.white.white.white.white.white.white.white {
 		background: transparent !important;
 	}
 </style>
