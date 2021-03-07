@@ -18,8 +18,19 @@
 		</transition>
 	</v-app>
 </template>
-<script>
-import Vue from "vue";
+<style>
+	.theme--light.v-application {
+		background-color: #ffdbdb;
+		background-image: url("~assets/bg.svg");
+		background-attachment: fixed;
+		background-size: 300px;
+		box-shadow: inset 100vw 100vw rgba(255, 255, 255, 0.95);
+	}
+	.v-application .white {
+		background: transparent !important;
+	}
+</style>
+<script> 
 export default {
 	name: "App",
 	data: () => ({}),

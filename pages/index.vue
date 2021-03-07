@@ -97,12 +97,13 @@
 	.cu.chat
 		text-align: left
 	.block
-		background: #fcfaff
+		background: #fff
 		color: #1976d2
 		margin: 8px 0
 		padding: 0 16px
-		padding-top: 4px
+		padding-top: 8px
 		border-radius: 4px
+		border: 1px solid #1976d23b
 </style>
 <style lang="sass">
 .output-container
