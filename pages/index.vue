@@ -2,8 +2,8 @@
 	<div class="index-container">
 		<img src="@/static/icon.png" width="64px" alt="icon" />
 		<h1>請支援貼圖</h1>
-		<div class="cu chat" data-style="telegram">
-			<div class="message text read" ref="printMe">
+		<div class="cu chat" data-style="telegram" ref="printMe">
+			<div class="message text read">
 				<div class="avatar">
 					<img
 						:src="avatar||'https://avatars.githubusercontent.com/u/16719720?s=460&u=3840af5115bb889cea5e8fa242b4e10b5ad3ab55&v=4'"
@@ -32,6 +32,7 @@
 				</div>
 			</div>
 		</div>
+		<a class="wr-btn" @click="print">產生</a>
 		<div class="block">
 			<h4 style="text-align:left">User Info Source</h4>
 			<v-radio-group v-model="userInfoSource" row>
@@ -67,7 +68,6 @@
 				</div>
 			</v-expand-transition>
 		</div>
-		<a class="wr-btn" @click="print">產生</a>
 
 		<v-dialog v-model="resultDialog" width="500">
 			<v-card>
@@ -94,8 +94,6 @@
 	margin: 0 auto
 	max-width: 512px
 	padding: 0 16px
-	.cu.chat
-		text-align: left
 	.block
 		background: #fcfaff
 		color: #1976d2
@@ -106,8 +104,9 @@
 </style>
 <style lang="sass">
 .output-container
-	background-color: #ffdbdb
+	background-color: #f3f3f3
 	border-radius: 4px
+	padding: 4px
 	img
 		width: 100%
 </style>
@@ -131,6 +130,7 @@ export default {
 		text: '請支援貼圖',
 		time: '12:34',
 		output: null,
+		outputWebp: null,
 		resultDialog: false
 	}),
 	watch: {
@@ -146,22 +146,23 @@ export default {
 	},
 	methods: {
 		async print() {
+			this.resultDialog = true
 			const el = this.$refs.printMe;
 			const options = {
 				backgroundColor: null,
-				useCORS: true
+				useCORS: true,
+				scale: 3
 			}
-			let canvas = await html2canvas(el, options)
-
-			let extra_canvas = document.createElement("canvas");
-			let height = 512 / canvas.width * canvas.height
+			const canvas = await html2canvas(el, options)
+			const extra_canvas = document.createElement("canvas");
+			const h = 512 / canvas.width * canvas.height
 			extra_canvas.setAttribute('width', 512);
-			extra_canvas.setAttribute('height', height);
+			extra_canvas.setAttribute('height', h);
 			let ctx = extra_canvas.getContext('2d');
-			ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 512, height);
-			this.output = extra_canvas.toDataURL();
+			ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 512, h);
+			this.output = canvas.toDataURL();
 			this.outputWebp = extra_canvas.toDataURL('image/webp');
-			this.resultDialog = true
+
 		},
 		async fetchUserInfo() {
 			this.usernameFetching = true
