@@ -79,13 +79,14 @@
 				<v-card-title>Result</v-card-title>
 				<v-card-text>
 					<div class="output-container" v-if="output">
-						<img :src="output" alt="output-img" />
+						<img :src="output.svg" alt="output-img" />
 					</div>
 					<div>Long press the image or click download to save.</div>
 				</v-card-text>
 				<v-card-actions>
-					<v-btn color="primary" text :href="output" :download="`${name}_${text}.png`">.png</v-btn>
-					<v-btn color="primary" text :href="outputWebp" :download="`${name}_${text}.webp`">.webp</v-btn>
+					<v-btn color="primary" text :href="output.svg" :download="`${name}_${text}.svg`">.png</v-btn>
+					<v-btn color="primary" text :href="output.png" :download="`${name}_${text}.png`">.png</v-btn>
+					<v-btn color="primary" text :href="output.webp" :download="`${name}_${text}.webp`">.webp</v-btn>
 					<v-spacer></v-spacer>
 					<v-btn color="primary" text @click="resultDialog = false">close</v-btn>
 				</v-card-actions>
@@ -102,6 +103,9 @@
 	margin-top: 32px
 	.cu.chat
 		text-align: left
+		.message
+			padding: 4px
+			margin: 0
 	.block
 		background: #fff
 		color: #1976d2
@@ -120,7 +124,7 @@
 		width: 100%
 </style>
 <script>
-import html2canvas from 'html2canvas';
+import domtoimage from 'dom-to-image';
 export default {
 	data: () => ({
 		userInfoSource: 'telegram',
@@ -138,8 +142,7 @@ export default {
 		},
 		text: '請支援貼圖',
 		time: '12:34',
-		output: null,
-		outputWebp: null,
+		output: { svg: null, webp: null, png: null },
 		resultDialog: false
 	}),
 	watch: {
@@ -160,24 +163,22 @@ export default {
 	},
 	methods: {
 		async print() {
+			const vue = this
 			window.scrollTo(0, 0)
 			this.resultDialog = true
 			const el = this.$refs.printMe;
-			const options = {
-				backgroundColor: null,
-				useCORS: true,
-				scale: 5
+			const svgImage = document.createElement('img')
+			this.output.svg = await domtoimage.toSvg(el)
+			svgImage.src = this.output
+			svgImage.onload = function () {
+				const canvas = document.createElement("canvas");
+				const h = 512 / svgImage.width * svgImage.height
+				canvas.setAttribute('width', 512);
+				canvas.setAttribute('height', h);
+				canvas.getContext('2d').drawImage(svgImage, 0, 0, canvas.width, canvas.height);
+				vue.output.png = canvas.toDataURL();
+				vue.output.webp = canvas.toDataURL('image/webp');
 			}
-			const canvas = await html2canvas(el, options)
-			const extra_canvas = document.createElement("canvas");
-			const h = 512 / canvas.width * canvas.height
-			extra_canvas.setAttribute('width', 512);
-			extra_canvas.setAttribute('height', h);
-			let ctx = extra_canvas.getContext('2d');
-			ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 512, h);
-			this.output = extra_canvas.toDataURL();
-			this.outputWebp = extra_canvas.toDataURL('image/webp');
-
 		},
 		async fetchUserInfo() {
 			this.usernameFetching = true

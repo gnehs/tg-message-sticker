@@ -23,7 +23,7 @@ export default {
     ],
     link: [
       { rel: 'icon', href: 'icon.png' },
-      { rel: 'stylesheet', href: 'https://gnehs.github.io/ChatUI/css/ChatUI.min.css' }
+      { rel: 'stylesheet', href: 'https://gnehs.github.io/ChatUI/css/ChatUI.min.css', crossorigin: "anonymous" }
     ]
   },
 
