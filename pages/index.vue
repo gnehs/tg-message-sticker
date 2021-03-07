@@ -32,7 +32,6 @@
 				</div>
 			</div>
 		</div>
-		<a class="wr-btn" @click="print">產生</a>
 		<div class="block">
 			<h4 style="text-align:left">User Info Source</h4>
 			<v-radio-group v-model="userInfoSource" row>
@@ -68,6 +67,7 @@
 				</div>
 			</v-expand-transition>
 		</div>
+		<a class="wr-btn" @click="print">產生</a>
 
 		<v-dialog v-model="resultDialog" width="500">
 			<v-card>
@@ -146,6 +146,7 @@ export default {
 	},
 	methods: {
 		async print() {
+			window.scrollTo(0, 0)
 			this.resultDialog = true
 			const el = this.$refs.printMe;
 			const options = {
