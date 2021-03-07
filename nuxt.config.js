@@ -14,7 +14,12 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+      { name: 'description', content: '產生 Telegram 訊息貼圖的好朋友' },
+      { property: 'og:title', content: '請支援貼圖' },
+      { property: 'og:description', content: '產生 Telegram 訊息貼圖的好朋友' },
+      { property: 'og:site_name', content: '請支援貼圖' },
+      { property: 'og:locale', content: 'zh_TW' },
+      { property: 'og:image', content: 'social.jpg' },
     ],
     link: [
       { rel: 'icon', href: 'icon.png' },
