@@ -1,0 +1,127 @@
+<template>
+	<div class="index-container">
+		<img src="@/static/icon.png" width="64px" alt="icon" />
+		<h1>請支援貼圖</h1>
+		<div class="cu chat" data-style="telegram" ref="printMe">
+			<div class="message text read">
+				<div class="avatar">
+					<img
+						:src="avatar||'https://avatars.githubusercontent.com/u/16719720?s=460&u=3840af5115bb889cea5e8fa242b4e10b5ad3ab55&v=4'"
+						alt="avatar"
+					/>
+				</div>
+				<div class="content">
+					<div class="author" :style="{color:nameColor}">
+						{{name}}
+						<div class="admin" v-if="admin">{{admin}}</div>
+					</div>
+					<div class="reply" v-if="reply.active">
+						<div class="author">{{reply.name}}</div>
+						<div class="content">
+							<div class="text">{{reply.text}}</div>
+						</div>
+					</div>
+					<div class="text" v-if="text">
+						<p v-html="text.replace(/\n/g,'<br>')" />
+					</div>
+					<div class="meta" v-if="time">
+						<div class="item">{{time}}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<v-file-input accept="image/*" label="avatar" v-model="avatar" />
+		<v-text-field v-model="name" label="name"></v-text-field>
+		<v-text-field v-model="admin" label="admin"></v-text-field>
+		<v-textarea v-model="text" label="text"></v-textarea>
+		<v-text-field v-model="time" label="time"></v-text-field>
+		<a class="wr-btn" @click="print">產生</a>
+
+		<v-dialog v-model="resultDialog" width="500">
+			<v-card>
+				<v-card-title>Result</v-card-title>
+				<v-card-text>
+					<div class="output-container" v-if="output">
+						<img :src="output" alt="output-img" />
+					</div>
+					<div>長按圖片或點擊下載來儲存</div>
+				</v-card-text>
+				<v-card-actions>
+					<v-btn
+						color="primary"
+						text
+						@click="outputFile = false"
+						:href="output"
+						:download="`${name}_${text}.png`"
+					>Download</v-btn>
+					<v-spacer></v-spacer>
+					<v-btn color="primary" text @click="resultDialog = false">close</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+	</div>
+</template>
+<style lang="sass" scoped>
+.index-container
+	text-align: center
+	margin: 0 auto
+	max-width: 512px
+	.cu.chat
+		width: 256px
+		max-width: 256px
+		text-align: left
+		overflow: hidden
+</style>
+<style lang="sass">
+.output-container
+	background-color: #ffdbdb
+	border-radius: 4px
+	img
+		width: 100%
+</style>
+<script>
+export default {
+	data: () => ({
+		avatar: null,
+		name: '勝勝',
+		nameColor: 'rgb(20, 177, 62)',
+		admin: '可愛勝勝',
+		reply: {
+			active: false,
+			name: '',
+			text: ''
+		},
+		text: '請支援貼圖',
+		time: '12:34',
+		output: null,
+		resultDialog: false
+	}),
+	watch: {
+		avatar() {
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				// log to console
+				// logs data:<type>;base64,wL2dvYWwgbW9yZ...
+				this.avatar = (reader.result);
+			};
+			reader.readAsDataURL(this.avatar)
+		}
+	},
+	methods: {
+		async print() {
+			const el = this.$refs.printMe;
+			// add option type to get the image version
+			// if not provided the promise will return 
+			// the canvas.
+			const options = {
+				type: 'dataURL',
+				backgroundColor: null,
+				useCORS: true,
+				scale: 2,
+			}
+			this.output = await this.$html2canvas(el, options);
+			this.resultDialog = true
+		},
+	}
+};
+</script>
