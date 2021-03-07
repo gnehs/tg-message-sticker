@@ -66,6 +66,7 @@
 	text-align: center
 	margin: 0 auto
 	max-width: 512px
+	padding: 0 16px
 	.cu.chat
 		width: 256px
 		max-width: 256px
