@@ -67,7 +67,7 @@
 				</div>
 			</v-expand-transition>
 		</div>
-		<a class="wr-btn" @click="print">產生</a>
+		<a class="wr-btn" @click="print">Generate</a>
 		<v-divider style="margin: 10px 0" />
 		<p style="opacity: .7;font-size: .85em">
 			Developed by
@@ -81,7 +81,7 @@
 					<div class="output-container" v-if="output">
 						<img :src="output" alt="output-img" />
 					</div>
-					<div>長按圖片或點擊下載來儲存</div>
+					<div>Long press the image or click download to save.</div>
 				</v-card-text>
 				<v-card-actions>
 					<v-btn color="primary" text :href="output" :download="`${name}_${text}.png`">.png</v-btn>
