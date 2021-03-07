@@ -2,8 +2,8 @@
 	<div class="index-container">
 		<img src="@/static/icon.png" width="64px" alt="icon" />
 		<h1>請支援貼圖</h1>
-		<div class="cu chat" data-style="telegram" ref="printMe">
-			<div class="message text read">
+		<div class="cu chat" data-style="telegram">
+			<div class="message text read" ref="printMe">
 				<div class="avatar">
 					<img
 						:src="avatar||'https://avatars.githubusercontent.com/u/16719720?s=460&u=3840af5115bb889cea5e8fa242b4e10b5ad3ab55&v=4'"
@@ -152,7 +152,7 @@ export default {
 			const options = {
 				backgroundColor: null,
 				useCORS: true,
-				scale: 3
+				scale: 5
 			}
 			const canvas = await html2canvas(el, options)
 			const extra_canvas = document.createElement("canvas");
@@ -161,7 +161,7 @@ export default {
 			extra_canvas.setAttribute('height', h);
 			let ctx = extra_canvas.getContext('2d');
 			ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 512, h);
-			this.output = canvas.toDataURL();
+			this.output = extra_canvas.toDataURL();
 			this.outputWebp = extra_canvas.toDataURL('image/webp');
 
 		},
