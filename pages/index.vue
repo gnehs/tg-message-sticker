@@ -123,7 +123,7 @@ export default {
 		avatarFile: null,
 		name: 'gnehs',
 		nameColor: 'rgb(20, 177, 62)',
-		admin: '可愛勝勝',
+		admin: '',
 		reply: {
 			active: false,
 			name: 'name',
@@ -144,6 +144,11 @@ export default {
 				this.avatar = (reader.result);
 			};
 			reader.readAsDataURL(this.avatarFile)
+		},
+		name() {
+			let pickRandom = arr => arr[Math.floor(Math.random() * arr.length)]
+			let colorList = ['#c75650', '#d57b27', '#7e6ccf', '#4fb231', '#2ea4ca']
+			this.nameColor = pickRandom(colorList)
 		}
 	},
 	methods: {
