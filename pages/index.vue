@@ -84,7 +84,7 @@
 					<div v-else style="text-align:center;margin: 20px 0;">
 						<v-progress-circular indeterminate color="primary" />
 					</div>
-					<div>Long press the image or click download to save.</div>
+					<div v-if="output.svg">Long press the image or click download to save.</div>
 				</v-card-text>
 				<v-card-actions>
 					<v-btn
