@@ -190,12 +190,6 @@ export default {
 					obj.onerror = reject;
 				});
 			}
-			function nextTick() {
-				return new Promise((resolve, reject) => {
-
-					this.$nextTick(() => resolve)
-				});
-			}
 			this.resultDialog = true
 			this.output = { svg: null, webp: null, png: null }
 			const el = this.$refs.printMe;
