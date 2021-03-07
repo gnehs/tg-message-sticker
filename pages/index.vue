@@ -78,10 +78,10 @@
 			<v-card>
 				<v-card-title>Result</v-card-title>
 				<v-card-text>
-					<div class="output-container" v-if="output.svg">
-						<img :src="output.svg" alt="output-img" />
+					<div class="output-container" v-show="output.svg">
+						<img :src="output.png||output.svg" alt="output-img" ref="outputImg" />
 					</div>
-					<div v-else style="text-align:center;margin: 20px 0;">
+					<div v-show="!output.svg" style="text-align:center;margin: 20px 0;">
 						<v-progress-circular indeterminate color="primary" />
 					</div>
 					<div v-if="output.svg">Long press the image or click download to save.</div>
@@ -184,13 +184,26 @@ export default {
 	},
 	methods: {
 		async print() {
+			function onload2promise(obj) {
+				return new Promise((resolve, reject) => {
+					obj.onload = () => resolve(obj);
+					obj.onerror = reject;
+				});
+			}
+			function nextTick() {
+				return new Promise((resolve, reject) => {
+
+					this.$nextTick(() => resolve)
+				});
+			}
 			this.resultDialog = true
 			this.output = { svg: null, webp: null, png: null }
 			const el = this.$refs.printMe;
-			const svgImage = document.createElement('img')
 			this.output.svg = await domtoimage.toSvg(el)
-			svgImage.src = this.output
-			// resize
+
+			const svgImage = this.$refs.outputImg
+			await onload2promise(svgImage)
+			// resize 
 			const canvas = document.createElement("canvas");
 			const h = 512 / svgImage.width * svgImage.height
 			canvas.setAttribute('width', 512);
