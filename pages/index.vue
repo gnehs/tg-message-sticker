@@ -94,6 +94,8 @@
 	margin: 0 auto
 	max-width: 512px
 	padding: 0 16px
+	.cu.chat
+		text-align: left
 	.block
 		background: #fcfaff
 		color: #1976d2
