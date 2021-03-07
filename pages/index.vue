@@ -149,8 +149,7 @@ export default {
 			const el = this.$refs.printMe;
 			const options = {
 				backgroundColor: null,
-				useCORS: true,
-				scale: 3
+				useCORS: true
 			}
 			let canvas = await html2canvas(el, options)
 
