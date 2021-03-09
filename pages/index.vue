@@ -79,7 +79,7 @@
 				<v-card-title>Result</v-card-title>
 				<v-card-text>
 					<div class="output-container" v-show="output.svg">
-						<img :src="output.png||output.svg" alt="output-img" ref="outputImg" />
+						<img :src="output.svg" alt="output-img" ref="outputImg" />
 					</div>
 					<div v-show="!output.svg" style="text-align:center;margin: 20px 0;">
 						<v-progress-circular indeterminate color="primary" />
