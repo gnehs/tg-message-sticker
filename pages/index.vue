@@ -102,7 +102,7 @@
 							</v-list-item>
 						</v-list>
 					</v-menu>
-					<v-btn color="primary" text @click="shareWebp" v-if="canShare">share</v-btn>
+					<v-btn color="primary" text @click="shareWebp" v-if="canShare&&outputShare.webp">share</v-btn>
 					<v-spacer></v-spacer>
 					<v-btn color="primary" text @click="resultDialog = false">close</v-btn>
 				</v-card-actions>
@@ -219,7 +219,7 @@ export default {
 			canvas.getContext('2d').drawImage(svgImage, 0, 0, canvas.width, canvas.height);
 			this.output.png = canvas.toDataURL();
 			this.output.webp = canvas.toDataURL('image/webp');
-			this.outputShare.webp = this.toBlob(canvas, 'image/webp');
+			this.outputShare.webp = await this.toBlob(canvas, 'image/webp');
 		},
 		async fetchUserInfo() {
 			this.usernameFetching = true
