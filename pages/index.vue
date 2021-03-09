@@ -87,27 +87,22 @@
 					<div v-if="output.svg">Long press the image or click download to save.</div>
 				</v-card-text>
 				<v-card-actions>
-					<v-btn
-						color="primary"
-						text
-						v-show="output.png"
-						:href="output.png"
-						:download="`${name}_${text}.png`"
-					>.png</v-btn>
-					<v-btn
-						color="primary"
-						text
-						v-show="output.svg"
-						:href="output.svg"
-						:download="`${name}_${text}.svg`"
-					>.svg</v-btn>
-					<v-btn
-						color="primary"
-						text
-						v-show="output.webp"
-						:href="output.webp"
-						:download="`${name}_${text}.webp`"
-					>.webp</v-btn>
+					<v-menu offset-y>
+						<template v-slot:activator="{ on, attrs }">
+							<v-btn color="primary" text v-bind="attrs" v-on="on">download</v-btn>
+						</template>
+						<v-list>
+							<v-list-item
+								v-for="k in Object.keys(output)"
+								:key="k"
+								:href="output[k]"
+								:download="`${name}_${text}.${k}`"
+							>
+								<v-list-item-title>.{{ k }}</v-list-item-title>
+							</v-list-item>
+						</v-list>
+					</v-menu>
+					<v-btn color="primary" text @click="shareWebp" v-if="canShare">share</v-btn>
 					<v-spacer></v-spacer>
 					<v-btn color="primary" text @click="resultDialog = false">close</v-btn>
 				</v-card-actions>
@@ -164,7 +159,9 @@ export default {
 		text: '請支援貼圖',
 		time: '12:34',
 		output: { svg: null, webp: null, png: null },
-		resultDialog: false
+		outputShare: { svg: null, webp: null, png: null },
+		resultDialog: false,
+		canShare: window.navigator.canShare
 	}),
 	watch: {
 		avatarFile() {
@@ -183,6 +180,23 @@ export default {
 		}
 	},
 	methods: {
+		toBlob(canvas, filetype) {
+			return new Promise((resolve, reject) => {
+				canvas.toBlob(blob => {
+					resolve(blob)
+				}, filetype);
+			});
+		},
+		shareWebp() {
+			const files = [new File([this.outputShare.webp], `${this.name}_${this.text}.webp`, { type: 'image/webp' })];
+			if (navigator.canShare && navigator.canShare({ files })) {
+				navigator.share({
+					text: this.text,
+					files,
+					title: this.name,
+				});
+			}
+		},
 		async print() {
 			function onload2promise(obj) {
 				return new Promise((resolve, reject) => {
@@ -205,6 +219,7 @@ export default {
 			canvas.getContext('2d').drawImage(svgImage, 0, 0, canvas.width, canvas.height);
 			this.output.png = canvas.toDataURL();
 			this.output.webp = canvas.toDataURL('image/webp');
+			this.outputShare.webp = this.toBlob(canvas, 'image/webp');
 		},
 		async fetchUserInfo() {
 			this.usernameFetching = true
